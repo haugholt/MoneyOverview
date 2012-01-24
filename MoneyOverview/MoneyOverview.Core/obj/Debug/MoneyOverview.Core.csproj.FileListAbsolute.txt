@@ -1,7 +1,0 @@
-C:\dev\EgoMoneyOverview\src\MoneyOverview\MoneyOverview.Core\bin\Debug\MoneyOverview.Core.dll
-C:\dev\EgoMoneyOverview\src\MoneyOverview\MoneyOverview.Core\bin\Debug\MoneyOverview.Core.pdb
-C:\dev\EgoMoneyOverview\src\MoneyOverview\MoneyOverview.Core\obj\Debug\ResolveAssemblyReference.cache
-C:\dev\EgoMoneyOverview\src\MoneyOverview\MoneyOverview.Core\obj\Debug\MoneyOverview.Core.dll
-C:\dev\EgoMoneyOverview\src\MoneyOverview\MoneyOverview.Core\obj\Debug\MoneyOverview.Core.pdb
-C:\dev\EgoMoneyOverview\src\MoneyOverview\MoneyOverview.Core\obj\Debug\Decl\MoneyOverview.Core.dll
-C:\dev\EgoMoneyOverview\src\MoneyOverview\MoneyOverview.Core\obj\Debug\Decl\MoneyOverview.Core.pdb
