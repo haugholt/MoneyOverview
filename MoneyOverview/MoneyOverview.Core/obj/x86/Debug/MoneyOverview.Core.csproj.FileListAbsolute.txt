@@ -1,5 +1,4 @@
 C:\dev\EgoMoneyOverview\src\MoneyOverview\MoneyOverview.Core\bin\Debug\MoneyOverview.Core.pdb
-C:\dev\EgoMoneyOverview\src\MoneyOverview\MoneyOverview.Core\bin\Debug\Machine.Specifications.dll
 C:\dev\EgoMoneyOverview\src\MoneyOverview\MoneyOverview.Core\obj\x86\Debug\ResolveAssemblyReference.cache
 C:\dev\EgoMoneyOverview\src\MoneyOverview\MoneyOverview.Core\obj\x86\Debug\MoneyOverview.Core.pdb
 C:\dev\EgoMoneyOverview\src\MoneyOverview\MoneyOverview.Core\obj\x86\Debug\Decl\MoneyOverview.Core.pdb
