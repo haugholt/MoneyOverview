@@ -62,7 +62,23 @@ namespace ConvertSKB
         private static List<string> SplitTheLine(string line)
         {
             var result = line.Split(new char[] { ';' });
-            return new List<string>(result);
+            var temp = new List<string>(result);
+            var endResult = new List<string>(temp.Count);
+            foreach (var item in temp)
+            {
+                string workitem = item;
+                if (workitem.StartsWith("\""))
+                {
+                    workitem = workitem.Substring(1);
+                }
+                if (workitem.EndsWith("\""))
+                {
+                    workitem = workitem.Substring(0, workitem.Length-1);
+                }
+                endResult.Add(workitem);
+            }
+            return endResult;
+            //return new List<string>(endResult);
         }
 
         private static AccountLine ParseLine(string line)

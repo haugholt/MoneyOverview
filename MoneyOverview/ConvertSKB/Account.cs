@@ -34,5 +34,9 @@ namespace ConvertSKB
         {
             return string.Format("{0}: {1} lines : {2} : {3}", Name, lines.Count, innSaldo, utSaldo);
         }
+
+        public List<AccountLine> Items {
+            get { return new List<AccountLine>(this.lines); } 
+        }
     }
 }

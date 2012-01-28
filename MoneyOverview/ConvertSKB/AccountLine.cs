@@ -7,20 +7,27 @@ namespace ConvertSKB
 {
     public class AccountLine
     {
-        private string date;
-        private string reference;
-        private string type;
-        private string desc;
-        private string amount;
+        //private string date;
+
+        public string Date { get; private set; }
+        public string Reference { get; private set; }
+        public string Type { get; private set; }
+        public string Desc { get; private set; }
+        public string Amount { get; private set; }
 
         public AccountLine(string date, string reference, string type, string p_4, string amount)
         {
             // TODO: Complete member initialization
-            this.date = date;
-            this.reference = reference;
-            this.type = type;
-            this.desc = p_4;
-            this.amount = amount;
+            this.Date = date;
+            this.Reference = reference;
+            this.Type = type;
+            this.Desc = p_4;
+            this.Amount = amount;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("AccountLine [{0}, {1}, {2}, {3}, {4}]", Date ,Reference, Type, Amount, Desc );
         }
     }
 }
