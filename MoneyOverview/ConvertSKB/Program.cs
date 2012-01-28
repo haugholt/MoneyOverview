@@ -9,7 +9,7 @@ namespace ConvertSKB
     {
         static void Main(string[] args)
         {
-            if (args.Length != 1)
+            if (args.Length != 2)
             {
                 Usage();
                 return;
@@ -17,11 +17,22 @@ namespace ConvertSKB
             
             string path = args[0];
             Console.Out.WriteLine("Path: "+path);
+
+            string pathOut = args[1];
+            AccountReader accountReader = new AccountReader();
+            PathAnalyst pathAnalyst = new PathAnalyst(path, accountReader);
+
+            ConsoleReporter consoleReporter = new ConsoleReporter();
+            FilePersistor filePersistor = new FilePersistor(pathOut);
+
+            SkbImporter skbImporter = new SkbImporter(pathAnalyst, consoleReporter, filePersistor);
+
+            skbImporter.Execute();
         }
 
         private static void Usage()
         {
-            Console.Out.WriteLine("Provide a path");
+            Console.Out.WriteLine("Provide two paths");
             
         }
     }
