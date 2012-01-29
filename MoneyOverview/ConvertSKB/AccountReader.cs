@@ -90,7 +90,7 @@ namespace ConvertSKB
             //if (!items[0].Equals(items[1])) Console.Out.WriteLine("DateDiff: {0}", line);
 
             string amount = null;
-            if (items[5] != "") amount = items[5];
+            if (items[5] != "") amount = "-" +items[5];
             if (items[6] != "") amount = items[6];
             if (amount == null) throw new NotImplementedException("Amount cannot be null!");
             return new AccountLine(items[0], items[2], items[3], items[4], amount);

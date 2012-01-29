@@ -14,6 +14,7 @@ namespace ConvertSKB
         public string Type { get; private set; }
         public string Desc { get; private set; }
         public string Amount { get; private set; }
+        public Money ActualAmount { get; private set; }
 
         public AccountLine(string date, string reference, string type, string p_4, string amount)
         {
@@ -23,11 +24,12 @@ namespace ConvertSKB
             this.Type = type;
             this.Desc = p_4;
             this.Amount = amount;
+            this.ActualAmount = new Money(amount);
         }
 
         public override string ToString()
         {
-            return string.Format("AccountLine [{0}, {1}, {2}, {3}, {4}]", Date ,Reference, Type, Amount, Desc );
+            return string.Format("AccountLine [{0}, {1}, {2}, {3}, {4}/{5}]", Date ,Reference, Type, Amount, Desc, ActualAmount);
         }
     }
 }
