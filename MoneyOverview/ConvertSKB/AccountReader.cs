@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MoneyOverview.Core.Infrastructure;
+using MoneyOverview.Core.Domain;
 
 namespace ConvertSKB
 {
@@ -10,6 +11,8 @@ namespace ConvertSKB
     {
         internal static Account Read(System.IO.FileInfo file)
         {
+            MoneyParser = new SimpleMoneyParser();
+
             FileReader reader = new FileReader(file.FullName);
             var lines = reader.ReadAllLines();
             string name = ParseFileName(file.Name);
@@ -34,6 +37,8 @@ namespace ConvertSKB
 
             return result;
         }
+
+        internal static SimpleMoneyParser MoneyParser { get; private set; }
 
         private static string ParseFileName(string fileName)
         {
@@ -81,6 +86,8 @@ namespace ConvertSKB
             //return new List<string>(endResult);
         }
 
+        
+
         private static AccountLine ParseLine(string line)
         {
             //"BOKFØRINGSDATO";"RENTEDATO";"ARKIVREFERANSE";"TYPE";"TEKST";"UT FRA KONTO";"INN PÅ KONTO";
@@ -89,11 +96,16 @@ namespace ConvertSKB
 
             //if (!items[0].Equals(items[1])) Console.Out.WriteLine("DateDiff: {0}", line);
 
+            SimpleMoney theAmount;
+
             string amount = null;
             if (items[5] != "") amount = "-" +items[5];
             if (items[6] != "") amount = items[6];
+
+            theAmount = MoneyParser.Parse(amount);
+
             if (amount == null) throw new NotImplementedException("Amount cannot be null!");
-            return new AccountLine(items[0], items[2], items[3], items[4], amount);
+            return new AccountLine(items[0], items[2], items[3], items[4], amount, theAmount);
         }
     }
 }

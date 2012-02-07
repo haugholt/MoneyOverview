@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MoneyOverview.Core.Domain;
 
 namespace ConvertSKB
 {
@@ -14,9 +15,9 @@ namespace ConvertSKB
         public string Type { get; private set; }
         public string Desc { get; private set; }
         public string Amount { get; private set; }
-        public Money ActualAmount { get; private set; }
+        public SimpleMoney ActualAmount { get; private set; }
 
-        public AccountLine(string date, string reference, string type, string p_4, string amount)
+        public AccountLine(string date, string reference, string type, string p_4, string amount, SimpleMoney actualAmount)
         {
             // TODO: Complete member initialization
             this.Date = date;
@@ -24,7 +25,7 @@ namespace ConvertSKB
             this.Type = type;
             this.Desc = p_4;
             this.Amount = amount;
-            this.ActualAmount = new Money(amount);
+            this.ActualAmount = actualAmount;
         }
 
         public override string ToString()

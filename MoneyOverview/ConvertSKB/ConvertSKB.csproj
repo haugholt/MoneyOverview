@@ -85,6 +85,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SaldoItem.cs" />
+    <Compile Include="SimpleMoneyParser.cs" />
     <Compile Include="SkbImporter.cs" />
   </ItemGroup>
   <ItemGroup>
