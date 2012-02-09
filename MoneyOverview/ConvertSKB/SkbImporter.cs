@@ -41,8 +41,10 @@ namespace ConvertSKB
             }
 
 
-
-            MatchInternalTransfers();
+            InternalTransfersMatcher itm = new InternalTransfersMatcher(pathAnalyst.Accounts, consoleReporter);
+            var results = itm.GetMatches();
+            
+            //MatchInternalTransfers();
         }
 
         private void MatchInternalTransfers()
@@ -142,7 +144,7 @@ namespace ConvertSKB
                 }
 
                 if (potentialMatchCounter == 0) continue;
-                if (potentialMatchCounter != 2)
+                if (potentialMatchCounter != 3)
                 {
                     consoleReporter.WriteLine("\nLooking for: \t{0} - found {1}", item, potentialMatchCounter);
                     foreach (var type in potentialMatches)

@@ -80,6 +80,7 @@
     <Compile Include="AccountReader.cs" />
     <Compile Include="ConsoleReporter.cs" />
     <Compile Include="FilePersistor.cs" />
+    <Compile Include="InternalTransfersMatcher.cs" />
     <Compile Include="Money.cs" />
     <Compile Include="PathAnalyst.cs" />
     <Compile Include="Program.cs" />
