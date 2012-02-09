@@ -47,80 +47,88 @@ namespace ConvertSKB
                     continue;
                 }
 
-                int potentialMatchCounter = 0;
-                Dictionary<string, List<AccountLine>> potentialMatches = new Dictionary<string, List<AccountLine>>();
-                potentialMatches.Add("DateDescAmount", new List<AccountLine>());
-                potentialMatches.Add("DateDesc", new List<AccountLine>());
-                potentialMatches.Add("Reference", new List<AccountLine>());
+                Dictionary<AccountLine, List<PotentialMatch>> potMatches = new Dictionary<AccountLine, List<PotentialMatch>>();
 
                 foreach (var account in rest)
                 {
                     foreach (var candidate in account.Items)
                     {
+                        InternalTransfer candidateMatch = new InternalTransfer(item, candidate);
+                        PotentialMatch potentialMatch = new PotentialMatch(candidateMatch);
 
                         bool foundAlready = false;
                         SimpleMoney combined = item.ActualAmount + candidate.ActualAmount;
 
-                        if (item.Date.Equals(candidate.Date)
-                            && item.Desc.Equals(candidate.Desc)
-                            && combined.Equals(new SimpleMoney(0, 0))
+                        if (candidateMatch.HasMatchingDates 
+                            && candidateMatch.HasMatchingAmounts
+                            && candidateMatch.HasMatchingDescriptions 
+                            && candidateMatch.HasMatchingReference
                             )
                         {
-                            foundAlready = true;
-                            hitCounter++;
-                            potentialMatchCounter++;
-                            potentialMatches["DateDescAmount"].Add(candidate);
-                            //consoleReporter.WriteLine(" Potential match {1:0000}: \t{0}", candidate, hitCounter);
-
+                            potentialMatch.AddMethod("DDAmount+");
                         }
 
-                        if (item.Date.Equals(candidate.Date)
-    && item.Desc.Equals(candidate.Desc)
-    )
+                        if (candidateMatch.HasMatchingDates
+                            && candidateMatch.HasMatchingAmounts
+                            && candidateMatch.HasMatchingDescriptions
+                            )
                         {
-                            foundAlready = true;
-                            hitCounter++;
-                            potentialMatchCounter++;
-                            potentialMatches["DateDesc"].Add(candidate);
-                            //consoleReporter.WriteLine(" Potential match {1:0000}: \t{0}", candidate, hitCounter);
-
+                            potentialMatch.AddMethod("DDAmount");
                         }
 
-                        if (item.Reference.Equals(candidate.Reference))
-                        {
-                            //if (foundAlready)
-                            //{
-                            //    consoleReporter.WriteLine(" !!! Found already: {0}", candidate);
-                            //}
+                        //if (candidateMatch.HasMatchingDates && candidateMatch.HasMatchingDescriptions && candidateMatch.HasMatchingReference)
+                        //{
+                        //    potentialMatch.AddMethod("DateDescRef");
+                        //}
 
-                            foundAlready = true;
-                            hitCounter++;
-                            potentialMatchCounter++;
-                            potentialMatches["Reference"].Add(candidate);
+                        //if (candidateMatch.HasMatchingDates && candidateMatch.HasMatchingDescriptions)
+                        //{
+                        //    potentialMatch.AddMethod("DateDesc");
+                        //}
+
+                        //if (candidateMatch.HasMatchingReference)
+                        //{
+                        //    potentialMatch.AddMethod("Reference");
+                        //}
+
+                        if (potentialMatch.HasAnyMatches)
+                        {
+                            if (!potMatches.ContainsKey(item)) potMatches.Add(item, new List<PotentialMatch>());
+                            potMatches[item].Add(potentialMatch);
                         }
                     } //candidate
                 } //Account in rest
 
-                if (potentialMatchCounter == 0) continue;
-                if (potentialMatchCounter != 3)
-                {
-                    Reporter.WriteLine("\nLooking for: \t{0} - found {1}", item, potentialMatchCounter);
-                    foreach (var type in potentialMatches)
+                if(potMatches.ContainsKey(item)){
+                    int potCount = potMatches[item].Count;
+                    //if (potCount == 1) continue;
+                    if (potCount == 1)
                     {
-                        //consoleReporter.WriteLine(" Type: {0}, Count: {1}", type.Key, type.Value.Count);
-                        if (type.Value.Count != 0)
+                        if (potMatches[item][0].OnlyMatchesOn("DDAmount"))
                         {
-                            foreach (var res in type.Value)
+                            continue;
+                            Reporter.WriteLine("\nOnly DDAmount\nLooking for: \t{0} - found {1}", item, potCount);
+                            foreach (var pot in potMatches[item])
                             {
-                                var calculated = res.ActualAmount + item.ActualAmount;
-                                var zero = new SimpleMoney(0, 0);
-                                Reporter.WriteLine(" {1,10}: \t{0} \t \t== {2} / {3}", res, type.Key, calculated, zero);
-                                //if (calculated == zero) consoleReporter.WriteLine("YAY");
-                                //if (calculated.Equals(zero)) consoleReporter.WriteLine("YAY2");
+                                Reporter.WriteLine("{0}", pot);
                             }
                         }
+                        foreach (var account in rest)
+                        {
+                            if (account.Items.Contains(potMatches[item][0].Candidate)){
+                                account.Items.Remove(potMatches[item][0].Candidate);
+                                account.Items.Remove(potMatches[item][0].Candidate);
+                            }
+                        }
+                    }else{
+
+                    Reporter.WriteLine("\nLooking for: \t{0} - found {1}", item, potCount);
+                    foreach(var pot in potMatches[item]){
+                        Reporter.WriteLine("{0}", pot);
                     }
                 }
+                }
+
             }// each item in input
         }
 
