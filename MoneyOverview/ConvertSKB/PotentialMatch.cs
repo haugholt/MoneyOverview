@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ConvertSKB
 {
-    class PotentialMatch
+    public class PotentialMatch
     {
         private InternalTransfer candidateMatch;
         List<string> matchMethods = new List<string>();

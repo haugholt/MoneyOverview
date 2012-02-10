@@ -16,6 +16,10 @@ namespace MoneyOverview.Core.Domain
             Ears = ears;
         }
 
+        public SimpleMoney(int kroner) : this(kroner, 0)
+        {
+        }
+
         // Declare which operator to overload (+), the types 
         // that can be added (two Complex objects), and the 
         // return type (Complex):
@@ -26,7 +30,7 @@ namespace MoneyOverview.Core.Domain
 
         public override string ToString()
         {
-            return string.Format("{0},{1:00}", Kroner, Ears);
+            return string.Format("{0:### ### ##0},{1:00}", Kroner, Ears);
         }
 
         public override bool Equals(object obj)
@@ -37,5 +41,9 @@ namespace MoneyOverview.Core.Domain
             return Kroner == other.Kroner && Ears == other.Ears;
         }
 
+
+        public bool IsPositiveNumber { get { 
+            return Kroner >= 0 && Ears >= 0; 
+        } }
     }
 }

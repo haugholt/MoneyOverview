@@ -38,5 +38,10 @@ namespace ConvertSKB
         public List<AccountLine> Items {
             get { return new List<AccountLine>(this.lines); } 
         }
+
+        internal void Remove(AccountLine accountLine)
+        {
+            lines.Remove(accountLine);
+        }
     }
 }
