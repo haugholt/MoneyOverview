@@ -45,5 +45,7 @@ namespace MoneyOverview.Core.Domain
         public bool IsPositiveNumber { get { 
             return Kroner >= 0 && Ears >= 0; 
         } }
+
+        public static SimpleMoney Zero { get { return new SimpleMoney(0); } }
     }
 }

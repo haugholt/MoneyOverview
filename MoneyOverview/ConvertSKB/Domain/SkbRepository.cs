@@ -17,5 +17,10 @@ namespace ConvertSKB.Domain
         {
             return new List<AccountLine>(lines);
         }
+
+        internal void Remove(AccountLine item)
+        {
+            lines.Remove(item);
+        }
     }
 }

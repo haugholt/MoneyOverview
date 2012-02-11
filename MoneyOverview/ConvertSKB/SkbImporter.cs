@@ -22,6 +22,8 @@ namespace ConvertSKB
 
         internal void Execute()
         {
+            SkbRepository skbRepo = new SkbRepository();
+
             string bank = pathAnalyst.Bank;
             consoleReporter.WriteLine("Analysing bank: {0}", bank);
             Dictionary<string, int> countTypes = new Dictionary<string, int>();
@@ -33,6 +35,7 @@ namespace ConvertSKB
 
                 foreach (var item in account.Items)
                 {
+                    skbRepo.Add(item);
                     if (!countTypes.ContainsKey(item.Type)) countTypes.Add(item.Type, 0);
                     countTypes[item.Type]++;
                 }
@@ -44,67 +47,76 @@ namespace ConvertSKB
             }
 
 
-            InternalTransfersMatcher itm = new InternalTransfersMatcher(pathAnalyst.Accounts, consoleReporter);
-            var results = itm.GetMatches();
+            //InternalTransfersMatcher itm = new InternalTransfersMatcher(pathAnalyst.Accounts, consoleReporter);
+            //var results = itm.GetMatches();
 
-            var innSaldo = new SaldoItem("0,00", "0,00");
-            var utSaldo = new SaldoItem("0,00", "0,00");
-            Account felles = new Account("Skandiabanken", "felles", innSaldo, utSaldo);
+            //var innSaldo = new SaldoItem("0,00", "0,00");
+            //var utSaldo = new SaldoItem("0,00", "0,00");
+            //Account felles = new Account("Skandiabanken", "felles", innSaldo, utSaldo);
 
-            SkbRepository skbRepo = new SkbRepository();
-            foreach (var account in pathAnalyst.Accounts)
+            
+            //foreach (var account in pathAnalyst.Accounts)
+            //{
+            //    foreach (var line in account.Items)
+            //    {
+            //        felles.AddLine(line);
+            //        skbRepo.Add(line);
+            //        consoleReporter.WriteLine(line.Desc);
+            //    }
+            //}
+
+            consoleReporter.WriteLine("\n\nBegin: {0} lines", skbRepo.GetAll().Count);
+            
+
+            InternalTransactionsRepository internalRepo = new InternalTransactionsRepository();
+
+            new InternalMatcherService(skbRepo, internalRepo, MatchOnAll).Match();
+            consoleReporter.WriteLine("\nAfter 1 run: {0} lines, {1} matches", skbRepo.GetAll().Count, internalRepo.GetAll().Count);
+            
+            InternalMatcherService internalMatcher = new InternalMatcherService(skbRepo, internalRepo, MatchOnMost);
+            internalMatcher.Match();
+
+            consoleReporter.WriteLine("\nAfter 2 run: {0} lines, {1} matches", skbRepo.GetAll().Count, internalRepo.GetAll().Count);
+
+            SimpleMoney totalInternal = SimpleMoney.Zero;
+            foreach (var inter in internalRepo.GetAll())
             {
-                foreach (var line in account.Items)
-                {
-                    felles.AddLine(line);
-                    skbRepo.Add(line);
-                    consoleReporter.WriteLine(line.Desc);
-                }
+                if (inter.ActualAmount.IsPositiveNumber) totalInternal += inter.ActualAmount;
             }
-
-            Func<AccountLine, SkbRepository, MatchResult> convertMethod;
-//             public delegate MatchResult MyDelegateType(AccountLine item, SkbRepository skbRepo);
-            //InternalMatcherService.Macho(skbRepo, convertMethod);
-            //var matchon = (AccountLine item, SkbRepository skandiaRepo) => { return new MatchResult(); };
-            InternalMatcherService.Match(skbRepo, (AccountLine item, SkbRepository skandiaRepo) => { return new MatchResult(); });
+            consoleReporter.WriteLine("total internal transactions: {0}", totalInternal);
+            //InternalMatcherService.Match(skbRepo, (AccountLine item, SkbRepository skandiaRepo) => { return new MatchResult(); });
         }
 
-        public MatchResult MatchOn(AccountLine item, SkbRepository skbRepo)
-        {
-            throw new NotImplementedException();
-        }
-        //   // List<AccountLine> 
-        //    ProcessResult pRes = new ProcessResult(skbRepo.GetAll(), true);
-        //    do
-        //    {
-        //        pRes = ProcessMatches(pRes.UnMatched);
-        //    } while (pRes.AnyChange);
-
-        //}
-
-        //private ProcessResult ProcessMatches(List<AccountLine> toProcess)
+        //public MatchResult MatchOn(AccountLine item, SkbRepository skbRepo)
         //{
-        //    if (toProcess.Count < 1) return ProcessResult.End;
-        //    bool anythingChanged = false;
-        //    List<AccountLine> unMatched = new List<AccountLine>();
-        //    foreach (var item in toProcess)
-        //    {
-        //        ProcessResult res = ProcessItem(item);
-        //        if (res.HasItems)
-        //        {
-        //            unMatched.AddRange(res.UnMatched);
-        //        }
-        //        if (res.AnyChange) anythingChanged = true;
-        //    }
-        //    return new ProcessResult(unMatched, anythingChanged);
-        //}
-
-        //private ProcessResult ProcessItem(AccountLine item)
-        //{
-        //    bool anythingChanged = false;
         //    throw new NotImplementedException();
         //}
+        public bool MatchOnAll(AccountLine item, AccountLine candidate)
+        {
+            SimpleMoney total = item.ActualAmount + candidate.ActualAmount;
+            // Console.Out.WriteLine("Matchonmost: {0}", total); 
 
-        
+            var res = item.Date.Equals(candidate.Date)
+                && total.Equals(SimpleMoney.Zero)
+                && item.Desc.Equals(candidate.Desc)
+                && item.Reference.Equals(candidate.Reference);
+
+            //if (res) Console.Out.WriteLine("Found match: {0}\n           : {1}", item, candidate);
+
+            return res;
+        }
+        public bool MatchOnMost(AccountLine item, AccountLine candidate)
+        {
+            SimpleMoney total = item.ActualAmount + candidate.ActualAmount;
+           // Console.Out.WriteLine("Matchonmost: {0}", total); 
+
+            var res = item.Date.Equals(candidate.Date)
+                && total.Equals(SimpleMoney.Zero)
+                && item.Desc.Equals(candidate.Desc);
+
+            //if (res) Console.Out.WriteLine("Found match: {0}\n           : {1}", item, candidate);
+
+            return res;
+        }
     }
 }

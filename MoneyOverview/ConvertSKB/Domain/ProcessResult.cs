@@ -8,6 +8,7 @@ namespace ConvertSKB.Domain
     public class ProcessResult
     {
         private List<AccountLine> list;
+        private AccountLine item;
         public bool AnyChange { get; private set; }
 
         public ProcessResult(List<AccountLine> list, bool anyChange)
@@ -17,11 +18,32 @@ namespace ConvertSKB.Domain
             this.AnyChange = anyChange;
         }
 
+        public ProcessResult(AccountLine item, bool anyChange)
+        {
+            this.list = new List<AccountLine>();
+            this.list.Add(item);
+            this.AnyChange = anyChange;
+        }
+
         public List<AccountLine> UnMatched { get { return new List<AccountLine>(list); } }
 
-        public static ProcessResult End { get {
-        return new ProcessResult(new List<AccountLine>(), false);} }
-
         public bool HasItems { get { return list.Count > 0; } }
+
+        public static ProcessResult End
+        {
+            get
+            {
+                return new ProcessResult(new List<AccountLine>(), false);
+            }
+        }
+
+        public static ProcessResult SomethingChanged
+        {
+            get
+            {
+                return new ProcessResult(new List<AccountLine>(), true);
+            }
+        }
+
     }
 }

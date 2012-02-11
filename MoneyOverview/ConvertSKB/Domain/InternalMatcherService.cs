@@ -5,14 +5,20 @@ using System.Text;
 
 namespace ConvertSKB.Domain
 {
-    public delegate MatchResult MyDelegateType(AccountLine item, SkbRepository skbRepo);
-
     public class InternalMatcherService
     {
-//        delegate MatchResult MyDelegateType(AccountLine item, SkbRepository skbRepo);
+        private SkbRepository skbRepo;
+        private InternalTransactionsRepository internalRepo;
+        private Func<AccountLine, AccountLine, bool> match;
 
-        //public static void Match(SkbRepository skbRepo, MyDelegateType fop)
-        public static void Match(SkbRepository skbRepo, Func<AccountLine, SkbRepository, MatchResult> convertMethod)
+        public InternalMatcherService(SkbRepository skbRepo, InternalTransactionsRepository internalRepo, Func<AccountLine, AccountLine, bool> match)
+        {
+            this.skbRepo = skbRepo;
+            this.match = match;
+            this.internalRepo = internalRepo;
+        }
+
+        public void Match()
         {
             ProcessResult pRes = new ProcessResult(skbRepo.GetAll(), true);
             do
@@ -21,7 +27,7 @@ namespace ConvertSKB.Domain
             } while (pRes.AnyChange);
         }
 
-        private static ProcessResult ProcessMatches(List<AccountLine> toProcess)
+        private ProcessResult ProcessMatches(List<AccountLine> toProcess)
         {
             if (toProcess.Count < 1) return ProcessResult.End;
             bool anythingChanged = false;
@@ -38,15 +44,33 @@ namespace ConvertSKB.Domain
             return new ProcessResult(unMatched, anythingChanged);
         }
 
-        private static ProcessResult ProcessItem(AccountLine item)
+        private ProcessResult ProcessItem(AccountLine item)
         {
             bool anythingChanged = false;
-            throw new NotImplementedException();
+            MatchResult result = FindCandidateMatches(item);
+            if (result.HasMultipleCandidates) return new ProcessResult(item, false);
+            if (result.HasNoResults) return ProcessResult.End;
+
+            TransferInternal(item, result.BestCandidate);
+            return ProcessResult.SomethingChanged;
         }
 
-        internal static void Macho(SkbRepository skbRepo, Func<AccountLine, SkbRepository, MatchResult> convertMethod)
+        private void TransferInternal(AccountLine item, AccountLine candidate)
         {
-            throw new NotImplementedException();
+            skbRepo.Remove(item);
+            skbRepo.Remove(candidate);
+            internalRepo.Add(item, candidate);
         }
+
+        private MatchResult FindCandidateMatches(AccountLine item)
+        {
+            List<AccountLine> foundCandidates = new List<AccountLine>();
+            foreach (var candidate in skbRepo.GetAll())
+            {
+                if (this.match(item, candidate)) foundCandidates.Add(candidate);
+            }
+            return new MatchResult(foundCandidates);
+        }
+
     }
 }
