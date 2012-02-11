@@ -61,7 +61,6 @@ namespace ConvertSKB
                         InternalTransfer candidateMatch = new InternalTransfer(item, candidate);
                         PotentialMatch potentialMatch = new PotentialMatch(candidateMatch);
 
-                        bool foundAlready = false;
                         SimpleMoney combined = item.ActualAmount + candidate.ActualAmount;
 
                         if (candidateMatch.HasMatchingDates

@@ -12,5 +12,10 @@ namespace ConvertSKB.Domain
         {
             lines.Add(line);
         }
+
+        internal List<AccountLine> GetAll()
+        {
+            return new List<AccountLine>(lines);
+        }
     }
 }
