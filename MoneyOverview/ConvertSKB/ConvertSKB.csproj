@@ -79,6 +79,7 @@
     <Compile Include="AccountLine.cs" />
     <Compile Include="AccountReader.cs" />
     <Compile Include="ConsoleReporter.cs" />
+    <Compile Include="Domain\SkbRepository.cs" />
     <Compile Include="FilePersistor.cs" />
     <Compile Include="InternalTransfer.cs" />
     <Compile Include="InternalTransfersMatcher.cs" />
@@ -98,6 +99,7 @@
       <Name>MoneyOverview.Core</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

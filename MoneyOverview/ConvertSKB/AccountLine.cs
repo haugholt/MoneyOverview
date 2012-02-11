@@ -16,8 +16,9 @@ namespace ConvertSKB
         public string Desc { get; private set; }
         public string Amount { get; private set; }
         public SimpleMoney ActualAmount { get; private set; }
+        public string AccountName { get; private set; }
 
-        public AccountLine(string date, string reference, string type, string p_4, string amount, SimpleMoney actualAmount)
+        public AccountLine(string date, string reference, string type, string p_4, string amount, SimpleMoney actualAmount, string accountName)
         {
             // TODO: Complete member initialization
             this.Date = date;
@@ -26,6 +27,7 @@ namespace ConvertSKB
             this.Desc = p_4;
             this.Amount = amount;
             this.ActualAmount = actualAmount;
+            this.AccountName = accountName;
         }
 
         public override string ToString()

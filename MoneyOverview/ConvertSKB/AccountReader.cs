@@ -31,7 +31,7 @@ namespace ConvertSKB
 
             foreach (var line in lines)
             {
-                AccountLine aLine = ParseLine(line);
+                AccountLine aLine = ParseLine(line, name);
                 result.AddLine(aLine);
             }
 
@@ -88,7 +88,7 @@ namespace ConvertSKB
 
         
 
-        private static AccountLine ParseLine(string line)
+        private static AccountLine ParseLine(string line, string accountName)
         {
             //"BOKFØRINGSDATO";"RENTEDATO";"ARKIVREFERANSE";"TYPE";"TEKST";"UT FRA KONTO";"INN PÅ KONTO";
             //Console.Out.WriteLine(" {0}", line);
@@ -105,7 +105,7 @@ namespace ConvertSKB
             theAmount = MoneyParser.Parse(amount);
 
             if (amount == null) throw new NotImplementedException("Amount cannot be null!");
-            return new AccountLine(items[0], items[2], items[3], items[4], amount, theAmount);
+            return new AccountLine(items[0], items[2], items[3], items[4], amount, theAmount, accountName);
         }
     }
 }

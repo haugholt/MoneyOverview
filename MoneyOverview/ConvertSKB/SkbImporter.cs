@@ -44,6 +44,20 @@ namespace ConvertSKB
             InternalTransfersMatcher itm = new InternalTransfersMatcher(pathAnalyst.Accounts, consoleReporter);
             var results = itm.GetMatches();
 
+            var innSaldo = new SaldoItem("0,00", "0,00");
+            var utSaldo = new SaldoItem("0,00", "0,00");
+            Account felles = new Account("Skandiabanken", "felles", innSaldo, utSaldo);
+
+            Domain.SkbRepository skbRepo = new Domain.SkbRepository();
+            foreach (var account in pathAnalyst.Accounts)
+            {
+                foreach (var line in account.Items)
+                {
+                    felles.AddLine(line);
+                    skbRepo.Add(line);
+                    consoleReporter.WriteLine(line.Desc);
+                }
+            }
         }
 
         
