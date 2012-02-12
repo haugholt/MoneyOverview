@@ -86,13 +86,8 @@
     <Compile Include="Domain\ProcessResult.cs" />
     <Compile Include="Domain\SkbRepository.cs" />
     <Compile Include="FilePersistor.cs" />
-    <Compile Include="InternalTransfer.cs" />
-    <Compile Include="InternalTransfersMatcher.cs" />
     <Compile Include="Domain\MatchResult.cs" />
-    <Compile Include="Money.cs" />
     <Compile Include="PathAnalyst.cs" />
-    <Compile Include="PotentialMatch.cs" />
-    <Compile Include="PotentialMatches.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SaldoItem.cs" />
