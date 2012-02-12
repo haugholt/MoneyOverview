@@ -83,6 +83,9 @@
     <Compile Include="Domain\AccountLineFilterService.cs" />
     <Compile Include="Domain\InternalMatcher.cs" />
     <Compile Include="Domain\InternalTransactionsRepository.cs" />
+    <Compile Include="Domain\Payees\Payee.cs" />
+    <Compile Include="Domain\Payees\PayeeExtractor.cs" />
+    <Compile Include="Domain\Payees\PayeeRepository.cs" />
     <Compile Include="Domain\ProcessResult.cs" />
     <Compile Include="Domain\SkbRepository.cs" />
     <Compile Include="FilePersistor.cs" />

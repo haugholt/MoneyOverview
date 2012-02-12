@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using MoneyOverview.Core.Domain;
 using ConvertSKB.Domain;
+using ConvertSKB.Domain.Payees;
 
 namespace ConvertSKB
 {
@@ -46,6 +47,7 @@ namespace ConvertSKB
                 consoleReporter.WriteLine("{0}: {1}", typecount.Key, typecount.Value);
             }
 
+            //Extract internal transactions
             consoleReporter.WriteLine("\n\nBegin: {0} lines", skbRepo.GetAll().Count);
             
             InternalTransactionsRepository internalRepo = new InternalTransactionsRepository();
@@ -60,6 +62,18 @@ namespace ConvertSKB
             List<AccountLine> positiveLines = AccountLineFilterService.GetPositiveLines(internalRepo.GetAll());
             var internalSum = AccountLineAggregatorService.Sum(positiveLines);
             consoleReporter.WriteLine("\nTotal internal transactions: {0}", internalSum);
+            //Extract internal transactions END
+
+            PayeeRepository payeeRepo = new PayeeRepository();
+            PayeeExtractor payeeExtractor = new PayeeExtractor(skbRepo, payeeRepo, consoleReporter);
+            payeeExtractor.ExtractPayees();
+
+            foreach(var payee in payeeRepo.GetAll()){
+                consoleReporter.WriteLine("{0}", payee);
+            }
+
+            consoleReporter.WriteLine("\n\nLines POST PROCESSING");
+            skbRepo.GetAll().ForEach(resitem => consoleReporter.WriteLine("{0}", resitem.Desc));
         }
     }
 }

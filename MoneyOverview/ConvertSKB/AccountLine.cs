@@ -18,13 +18,13 @@ namespace ConvertSKB
         public SimpleMoney ActualAmount { get; private set; }
         public string AccountName { get; private set; }
 
-        public AccountLine(string date, string reference, string type, string p_4, string amount, SimpleMoney actualAmount, string accountName)
+        public AccountLine(string date, string reference, string type, string desc, string amount, SimpleMoney actualAmount, string accountName)
         {
             // TODO: Complete member initialization
             this.Date = date;
             this.Reference = reference;
             this.Type = type;
-            this.Desc = p_4;
+            this.Desc = desc;
             this.Amount = amount;
             this.ActualAmount = actualAmount;
             this.AccountName = accountName;
