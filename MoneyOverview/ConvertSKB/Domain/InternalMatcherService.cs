@@ -11,15 +11,15 @@ namespace ConvertSKB.Domain
         private InternalTransactionsRepository internalRepo;
         private Func<AccountLine, AccountLine, bool> match;
 
-        public InternalMatcherService(SkbRepository skbRepo, InternalTransactionsRepository internalRepo, Func<AccountLine, AccountLine, bool> match)
+        public InternalMatcherService(SkbRepository skbRepo, InternalTransactionsRepository internalRepo)
         {
             this.skbRepo = skbRepo;
-            this.match = match;
             this.internalRepo = internalRepo;
         }
 
-        public void Match()
+        public void Match(Func<AccountLine, AccountLine, bool> matchmethod)
         {
+            this.match = matchmethod;
             ProcessResult pRes = new ProcessResult(skbRepo.GetAll(), true);
             do
             {

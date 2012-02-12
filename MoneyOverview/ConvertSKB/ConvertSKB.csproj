@@ -79,6 +79,8 @@
     <Compile Include="AccountLine.cs" />
     <Compile Include="AccountReader.cs" />
     <Compile Include="ConsoleReporter.cs" />
+    <Compile Include="Domain\AccountLineAggregatorService.cs" />
+    <Compile Include="Domain\AccountLineFilterService.cs" />
     <Compile Include="Domain\InternalMatcherService.cs" />
     <Compile Include="Domain\InternalTransactionsRepository.cs" />
     <Compile Include="Domain\ProcessResult.cs" />

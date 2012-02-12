@@ -67,15 +67,13 @@ namespace ConvertSKB
 
             consoleReporter.WriteLine("\n\nBegin: {0} lines", skbRepo.GetAll().Count);
             
-
             InternalTransactionsRepository internalRepo = new InternalTransactionsRepository();
+            InternalMatcherService internalMatcher = new InternalMatcherService(skbRepo, internalRepo);
 
-            new InternalMatcherService(skbRepo, internalRepo, MatchOnAll).Match();
+            internalMatcher.Match(MatchOnAll);
             consoleReporter.WriteLine("\nAfter 1 run: {0} lines, {1} matches", skbRepo.GetAll().Count, internalRepo.GetAll().Count);
             
-            InternalMatcherService internalMatcher = new InternalMatcherService(skbRepo, internalRepo, MatchOnMost);
-            internalMatcher.Match();
-
+            internalMatcher.Match(MatchOnMost);
             consoleReporter.WriteLine("\nAfter 2 run: {0} lines, {1} matches", skbRepo.GetAll().Count, internalRepo.GetAll().Count);
 
             SimpleMoney totalInternal = SimpleMoney.Zero;
@@ -83,40 +81,31 @@ namespace ConvertSKB
             {
                 if (inter.ActualAmount.IsPositiveNumber) totalInternal += inter.ActualAmount;
             }
-            consoleReporter.WriteLine("total internal transactions: {0}", totalInternal);
-            //InternalMatcherService.Match(skbRepo, (AccountLine item, SkbRepository skandiaRepo) => { return new MatchResult(); });
+            consoleReporter.WriteLine("\nTotal internal transactions: {0}", totalInternal);
+
+            List<AccountLine> positiveLines = AccountLineFilterService.GetPositiveLines(internalRepo.GetAll());
+            var internalSum = AccountLineAggregatorService.Sum(positiveLines);
+            consoleReporter.WriteLine("\nTotal internal transactions: {0}", internalSum);
         }
 
-        //public MatchResult MatchOn(AccountLine item, SkbRepository skbRepo)
-        //{
-        //    throw new NotImplementedException();
-        //}
         public bool MatchOnAll(AccountLine item, AccountLine candidate)
         {
             SimpleMoney total = item.ActualAmount + candidate.ActualAmount;
-            // Console.Out.WriteLine("Matchonmost: {0}", total); 
 
-            var res = item.Date.Equals(candidate.Date)
-                && total.Equals(SimpleMoney.Zero)
-                && item.Desc.Equals(candidate.Desc)
-                && item.Reference.Equals(candidate.Reference);
+            return MatchOnMost(item, candidate) && item.Reference.Equals(candidate.Reference);
 
-            //if (res) Console.Out.WriteLine("Found match: {0}\n           : {1}", item, candidate);
-
-            return res;
+            //return item.Date.Equals(candidate.Date)
+            //    && total.Equals(SimpleMoney.Zero)
+            //    && item.Desc.Equals(candidate.Desc)
+            //    && item.Reference.Equals(candidate.Reference);
         }
         public bool MatchOnMost(AccountLine item, AccountLine candidate)
         {
             SimpleMoney total = item.ActualAmount + candidate.ActualAmount;
-           // Console.Out.WriteLine("Matchonmost: {0}", total); 
 
-            var res = item.Date.Equals(candidate.Date)
+            return item.Date.Equals(candidate.Date)
                 && total.Equals(SimpleMoney.Zero)
                 && item.Desc.Equals(candidate.Desc);
-
-            //if (res) Console.Out.WriteLine("Found match: {0}\n           : {1}", item, candidate);
-
-            return res;
         }
     }
 }
