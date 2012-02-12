@@ -70,42 +70,15 @@ namespace ConvertSKB
             InternalTransactionsRepository internalRepo = new InternalTransactionsRepository();
             InternalMatcherService internalMatcher = new InternalMatcherService(skbRepo, internalRepo);
 
-            internalMatcher.Match(MatchOnAll);
+            internalMatcher.Match(InternalMatcherService.MatchOnAll);
             consoleReporter.WriteLine("\nAfter 1 run: {0} lines, {1} matches", skbRepo.GetAll().Count, internalRepo.GetAll().Count);
-            
-            internalMatcher.Match(MatchOnMost);
-            consoleReporter.WriteLine("\nAfter 2 run: {0} lines, {1} matches", skbRepo.GetAll().Count, internalRepo.GetAll().Count);
 
-            SimpleMoney totalInternal = SimpleMoney.Zero;
-            foreach (var inter in internalRepo.GetAll())
-            {
-                if (inter.ActualAmount.IsPositiveNumber) totalInternal += inter.ActualAmount;
-            }
-            consoleReporter.WriteLine("\nTotal internal transactions: {0}", totalInternal);
+            internalMatcher.Match(InternalMatcherService.MatchOnMost);
+            consoleReporter.WriteLine("\nAfter 2 run: {0} lines, {1} matches", skbRepo.GetAll().Count, internalRepo.GetAll().Count);
 
             List<AccountLine> positiveLines = AccountLineFilterService.GetPositiveLines(internalRepo.GetAll());
             var internalSum = AccountLineAggregatorService.Sum(positiveLines);
             consoleReporter.WriteLine("\nTotal internal transactions: {0}", internalSum);
-        }
-
-        public bool MatchOnAll(AccountLine item, AccountLine candidate)
-        {
-            SimpleMoney total = item.ActualAmount + candidate.ActualAmount;
-
-            return MatchOnMost(item, candidate) && item.Reference.Equals(candidate.Reference);
-
-            //return item.Date.Equals(candidate.Date)
-            //    && total.Equals(SimpleMoney.Zero)
-            //    && item.Desc.Equals(candidate.Desc)
-            //    && item.Reference.Equals(candidate.Reference);
-        }
-        public bool MatchOnMost(AccountLine item, AccountLine candidate)
-        {
-            SimpleMoney total = item.ActualAmount + candidate.ActualAmount;
-
-            return item.Date.Equals(candidate.Date)
-                && total.Equals(SimpleMoney.Zero)
-                && item.Desc.Equals(candidate.Desc);
         }
     }
 }

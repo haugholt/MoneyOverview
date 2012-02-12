@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MoneyOverview.Core.Domain;
 
 namespace ConvertSKB.Domain
 {
@@ -27,6 +28,25 @@ namespace ConvertSKB.Domain
             } while (pRes.AnyChange);
         }
 
+        public static bool MatchOnAll(AccountLine item, AccountLine candidate)
+        {
+            SimpleMoney total = item.ActualAmount + candidate.ActualAmount;
+
+            return MatchOnMost(item, candidate) && item.Reference.Equals(candidate.Reference);
+
+            //return item.Date.Equals(candidate.Date)
+            //    && total.Equals(SimpleMoney.Zero)
+            //    && item.Desc.Equals(candidate.Desc)
+            //    && item.Reference.Equals(candidate.Reference);
+        }
+        public static bool MatchOnMost(AccountLine item, AccountLine candidate)
+        {
+            SimpleMoney total = item.ActualAmount + candidate.ActualAmount;
+
+            return item.Date.Equals(candidate.Date)
+                && total.Equals(SimpleMoney.Zero)
+                && item.Desc.Equals(candidate.Desc);
+        }
         private ProcessResult ProcessMatches(List<AccountLine> toProcess)
         {
             if (toProcess.Count < 1) return ProcessResult.End;
