@@ -68,12 +68,12 @@ namespace ConvertSKB
             consoleReporter.WriteLine("\n\nBegin: {0} lines", skbRepo.GetAll().Count);
             
             InternalTransactionsRepository internalRepo = new InternalTransactionsRepository();
-            InternalMatcherService internalMatcher = new InternalMatcherService(skbRepo, internalRepo);
+            InternalMatcher internalMatcher = new InternalMatcher(skbRepo, internalRepo);
 
-            internalMatcher.Match(InternalMatcherService.MatchOnAll);
+            internalMatcher.Match(InternalMatcher.MatchOnAll);
             consoleReporter.WriteLine("\nAfter 1 run: {0} lines, {1} matches", skbRepo.GetAll().Count, internalRepo.GetAll().Count);
 
-            internalMatcher.Match(InternalMatcherService.MatchOnMost);
+            internalMatcher.Match(InternalMatcher.MatchOnMost);
             consoleReporter.WriteLine("\nAfter 2 run: {0} lines, {1} matches", skbRepo.GetAll().Count, internalRepo.GetAll().Count);
 
             List<AccountLine> positiveLines = AccountLineFilterService.GetPositiveLines(internalRepo.GetAll());

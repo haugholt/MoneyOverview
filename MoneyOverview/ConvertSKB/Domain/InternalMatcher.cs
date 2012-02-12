@@ -6,13 +6,13 @@ using MoneyOverview.Core.Domain;
 
 namespace ConvertSKB.Domain
 {
-    public class InternalMatcherService
+    public class InternalMatcher
     {
         private SkbRepository skbRepo;
         private InternalTransactionsRepository internalRepo;
         private Func<AccountLine, AccountLine, bool> match;
 
-        public InternalMatcherService(SkbRepository skbRepo, InternalTransactionsRepository internalRepo)
+        public InternalMatcher(SkbRepository skbRepo, InternalTransactionsRepository internalRepo)
         {
             this.skbRepo = skbRepo;
             this.internalRepo = internalRepo;
