@@ -14,6 +14,17 @@ namespace ConvertSKB
                 Usage();
                 return;
             }
+
+            // %cd% - where you are calling from
+            //string directory = Environment.CurrentDirectory;
+
+            // (relative path and)command + args
+            //string directory = Environment.CommandLine;
+
+            //Where the executable lives.
+            //string directory = System.AppDomain.CurrentDomain.BaseDirectory;
+            //Console.Out.WriteLine("bo = \n{0}", directory+@"Logs\LogFile.txt");
+
             
             string path = args[0];
             Console.Out.WriteLine("Path: "+path);
