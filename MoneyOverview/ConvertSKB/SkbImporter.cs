@@ -72,8 +72,18 @@ namespace ConvertSKB
                 consoleReporter.WriteLine("{0}", payee);
             }
 
-            consoleReporter.WriteLine("\n\nLines POST PROCESSING");
-            skbRepo.GetAll().ForEach(resitem => consoleReporter.WriteLine("{0}", resitem.Desc));
+            //consoleReporter.WriteLine("\n\nLines POST PROCESSING");
+            //skbRepo.GetAll().ForEach(resitem => consoleReporter.WriteLine("{0}", resitem.Desc));
+
+            ReportAllSkbLines(skbRepo, consoleReporter);
+        }
+
+        private void ReportAllSkbLines(SkbRepository skbRepo, ConsoleReporter consoleReporter)
+        {
+            consoleReporter.WriteLine("\nSkbLines:");
+            consoleReporter.WriteLine("AccountName;Date;ActualAmount;Type;Reference;Desc");
+            skbRepo.GetAll().ForEach(resitem => consoleReporter.WriteLine("{0};{1};{2};{3};{4};{5}"
+                , resitem.AccountName, resitem.Date, resitem.ActualAmount, resitem.Type, resitem.Reference, resitem.Desc));
         }
     }
 }

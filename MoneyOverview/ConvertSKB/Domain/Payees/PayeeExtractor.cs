@@ -38,7 +38,7 @@ namespace ConvertSKB.Domain.Payees
             StripNonRepeatingData(" (Jan|Feb|Mar|Apr|Mai|Jun|Jul|Aug|Sep|Okt|Nov|Des|May|Oct|Dec) ");
             StripNonRepeatingData(" (Januar|Februar|Mars|April|Mai|Juni|Juli|August|September|Oktober|November|Desember) ");
             StripNonRepeatingData("2011");
-            StripNonRepeatingData("  *");
+            StripNonRepeatingData("(  )*");//Double spaces
         }
 
         private void StripNonRepeatingData(string regexstring) {
