@@ -76,6 +76,8 @@ namespace ConvertSKB
             //skbRepo.GetAll().ForEach(resitem => consoleReporter.WriteLine("{0}", resitem.Desc));
 
             ReportAllSkbLines(skbRepo, consoleReporter);
+
+            this.filePersistor.Persist(skbRepo.GetAll());
         }
 
         private void ReportAllSkbLines(SkbRepository skbRepo, ConsoleReporter consoleReporter)

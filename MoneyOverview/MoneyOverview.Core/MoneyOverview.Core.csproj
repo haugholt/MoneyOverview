@@ -56,6 +56,7 @@
   <ItemGroup>
     <Compile Include="Domain\SimpleMoney.cs" />
     <Compile Include="Infrastructure\FileReader.cs" />
+    <Compile Include="Infrastructure\FileWriter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

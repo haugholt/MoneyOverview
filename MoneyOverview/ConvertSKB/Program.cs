@@ -30,6 +30,7 @@ namespace ConvertSKB
             Console.Out.WriteLine("Path: "+path);
 
             string pathOut = args[1];
+
             AccountReader accountReader = new AccountReader();
             PathAnalyst pathAnalyst = new PathAnalyst(path, accountReader);
 
